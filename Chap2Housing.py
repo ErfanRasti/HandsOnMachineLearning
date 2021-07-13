@@ -1,5 +1,6 @@
 # %%
 """This code is related to chapter 2 of the book."""
+import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import tarfile
@@ -51,4 +52,13 @@ def load_housing_data(housing_path=HOUSING_PATH):
 housing = load_housing_data()
 housing.head()
 
+# %%
+housing.info()
+# %%
+housing["ocean_proximity"].value_counts()
+# %%
+housing.describe()
+# %%
+housing.hist(bins=50, figsize=(20, 15))
+plt.show()
 # %%
