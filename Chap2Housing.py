@@ -1,5 +1,6 @@
 # %%
 """This code is related to chapter 2 of the book."""
+from pandas.plotting import scatter_matrix
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import train_test_split
 from zlib import crc32
@@ -165,3 +166,23 @@ housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4,
 plt.legend()
 
 # %%
+corr_matrix = housing.corr()
+corr_matrix["median_house_value"].sort_values(ascending=False)
+# %%
+attributes = ["median_house_value", "median_income", "total_rooms",
+              "housing_median_age"]
+scatter_matrix(housing[attributes], figsize=(12, 8))
+
+# %%
+housing.plot(kind="scatter", x="median_income", y="median_house_value",
+             alpha=0.1)
+
+# %%
+housing["rooms_per_household"] = housing["total_rooms"]/housing["households"]
+housing["bedrooms_per_room"] = housing["total_bedrooms"]/housing["total_rooms"]
+housing["population_per_household"] = housing["population"] / \
+    housing["households"]
+
+# %%
+corr_matrix = housing.corr()
+corr_matrix["median_house_value"].sort_values(ascending=False)
