@@ -1,5 +1,6 @@
 # %%
 """This code is related to chapter 2 of the book."""
+from sklearn.impute import SimpleImputer
 from pandas.plotting import scatter_matrix
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import train_test_split
@@ -186,3 +187,25 @@ housing["population_per_household"] = housing["population"] / \
 # %%
 corr_matrix = housing.corr()
 corr_matrix["median_house_value"].sort_values(ascending=False)
+
+# %%
+housing = strat_train_set.drop("median_house_value", axis=1)
+housing_labels = strat_train_set["median_house_value"].copy()
+# %%
+housing.dropna(subset=["total_bedrooms"])  # option 1
+housing.drop("total_bedrooms", axis=1)  # option 2
+median = housing["total_bedrooms"].median()  # option 3
+housing["total_bedrooms"].fillna(median, inplace=True)
+
+# %%
+imputer = SimpleImputer(strategy="median")
+housing_num = housing.drop("ocean_proximity", axis=1)
+imputer.fit(housing_num)
+# %%
+imputer.statistics_, housing_num.median().values
+# %%
+X = imputer.transform(housing_num)
+housing_tr = pd.DataFrame(X, columns=housing_num.columns,
+                          index=housing_num.index)
+
+# %%
