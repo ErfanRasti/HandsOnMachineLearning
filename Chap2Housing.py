@@ -1,5 +1,11 @@
 # %%
 """This code is related to chapter 2 of the book."""
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OrdinalEncoder
 from sklearn.impute import SimpleImputer
 from pandas.plotting import scatter_matrix
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -208,4 +214,84 @@ X = imputer.transform(housing_num)
 housing_tr = pd.DataFrame(X, columns=housing_num.columns,
                           index=housing_num.index)
 
+# %%
+housing_cat = housing[["ocean_proximity"]]
+housing_cat.head(10)
+# %%
+ordinal_encoder = OrdinalEncoder()
+housing_cat_encoded = ordinal_encoder.fit_transform(housing_cat)
+housing_cat_encoded[:10]
+
+# %%
+ordinal_encoder.categories_
+# %%
+cat_encoder = OneHotEncoder()
+housing_cat_1hot = cat_encoder.fit_transform(housing_cat)
+housing_cat_1hot
+
+# %%
+housing_cat_1hot.toarray()
+# %%
+cat_encoder.categories_
+# %%
+# Index Location
+rooms_ix, bedrooms_ix, population_ix, households_ix = 3, 4, 5, 6
+
+
+class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
+    """This class adds some extra attributes to the dataset."""
+
+    """
+    BaseEstimator: Base class for all estimators in scikit-learn.
+    TransformerMixin: Mixin class for all transformers in scikit-learn.
+    """
+
+    def __init__(self, add_bedrooms_per_room=True):  # no *args or **kargs
+        """Initialize the add_bedrooms_per_room parameter, to determine\
+        if this column adds or not."""
+        self.add_bedrooms_per_room = add_bedrooms_per_room
+
+    def fit(self, X, y=None):
+        """Return the dataset itself."""
+        return self  # nothing else to do
+
+    def transform(self, X):
+        """Transform the dataset with adding some new attributes."""
+        rooms_per_household = X[:, rooms_ix] / X[:, households_ix]
+        population_per_household = X[:, population_ix] / X[:, households_ix]
+        if self.add_bedrooms_per_room:
+            """
+            numpy.c_ :
+            Translates slice objects to concatenation along the second axis.
+            """
+            bedrooms_per_room = X[:, bedrooms_ix] / X[:, rooms_ix]
+            return np.c_[X, rooms_per_household, population_per_household,
+                         bedrooms_per_room]
+        else:
+            return np.c_[X, rooms_per_household, population_per_household]
+
+
+# Defining the object
+attr_adder = CombinedAttributesAdder(add_bedrooms_per_room=False)
+# Applying the object on the housing.values and saving it in a new variable
+housing_extra_attribs = attr_adder.transform(housing.values)
+
+# %%
+num_pipeline = Pipeline([
+    ('imputer', SimpleImputer(strategy="median")),
+    ('attribs_adder', CombinedAttributesAdder()),
+    ('std_scaler', StandardScaler()),
+])
+
+housing_num_tr = num_pipeline.fit_transform(housing_num)
+
+# %%
+num_attribs = list(housing_num)
+cat_attribs = ["ocean_proximity"]
+full_pipeline = ColumnTransformer([
+    ("num", num_pipeline, num_attribs),
+    ("cat", OneHotEncoder(), cat_attribs),
+])
+
+housing_prepared = full_pipeline.fit_transform(housing)
 # %%
