@@ -1,3 +1,9 @@
+# cache files
+cache
+
+# figures
+figures
+
 # VSCode
 .vscode
 
