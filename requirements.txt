@@ -92,7 +92,7 @@ pyrsistent=0.17.3=py38he774522_0
 python=3.8.11=h6244533_1
 python-dateutil=2.8.2=pyhd3eb1b0_0
 pytz=2021.1=pyhd3eb1b0_0
-pywin32=228=py38hbaba5e8_1
+pywin32=301=pypi_0
 pywinpty=0.5.7=py38_0
 pyzmq=22.2.1=py38hd77b12b_1
 qt=5.9.7=vc14h73c81de_0
@@ -106,12 +106,14 @@ sip=4.19.13=py38ha925a31_0
 six=1.16.0=pyhd3eb1b0_0
 snowballstemmer=2.1.0=pyhd3eb1b0_0
 sqlite=3.36.0=h2bbff1b_0
+style=1.1.0=pypi_0
 terminado=0.9.4=py38haa95532_0
 testpath=0.5.0=pyhd3eb1b0_0
 threadpoolctl=2.2.0=pyhbf3da8f_0
 tk=8.6.10=he774522_0
 tornado=6.1=py38h2bbff1b_0
 traitlets=5.0.5=pyhd3eb1b0_0
+update=0.0.1=pypi_0
 vc=14.2=h21ff451_1
 vs2015_runtime=14.27.29016=h5e58377_2
 wcwidth=0.2.5=py_0
