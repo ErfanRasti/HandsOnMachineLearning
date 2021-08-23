@@ -1,7 +1,10 @@
-# cache files
+# predictions folder
+predictions
+
+# Cache folder
 cache
 
-# figures
+# Figures
 figures
 
 # VSCode
