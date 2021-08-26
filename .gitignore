@@ -1,4 +1,7 @@
-# predictions folder
+# Spam folder in datasets directory
+datasets/spam
+
+# Predictions folder
 predictions
 
 # Cache folder
